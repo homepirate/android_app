@@ -11,7 +11,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class Home : Fragment() {
+class HomeFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var characterAdapter: CharacterAdapter

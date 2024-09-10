@@ -12,9 +12,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            showFragment(Home::class.java)
-        }
+        setContentView(R.layout.activity_main)
+        showFragment(HomeFragment::class.java)
     }
 
     private fun showFragment(fragmentClass: Class<out Fragment>) {
