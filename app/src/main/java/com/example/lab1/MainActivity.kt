@@ -1,37 +1,39 @@
 package com.example.lab1
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.lab1.ui.theme.Lab1Theme
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        setContent {
+            showFragment(Home::class.java)
+        }
+    }
+
+    private fun showFragment(fragmentClass: Class<out Fragment>) {
+        val fragmentManager: FragmentManager = supportFragmentManager
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+
+        // Hide all fragments
+        fragmentManager.fragments.forEach { fragmentTransaction.hide(it) }
+
+        // Show the selected fragment
+        val tag = fragmentClass.simpleName
+        var fragment = fragmentManager.findFragmentByTag(tag)
+        if (fragment == null) {
+            fragment = fragmentClass.newInstance()
+            fragmentTransaction.add(R.id.fragment_container, fragment, tag)
+        } else {
+            fragmentTransaction.show(fragment)
+        }
+
+        fragmentTransaction.commit()
     }
 }
-
-//@Composable
-//fun Greeting(name: String, modifier: Modifier = Modifier) {
-//    Text(
-//        text = "Hello $name!",
-//        modifier = modifier
-//    )
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    Lab1Theme {
-//        Greeting("Android")
-//    }
-//}
