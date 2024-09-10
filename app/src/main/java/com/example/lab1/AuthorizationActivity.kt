@@ -14,7 +14,7 @@ class AuthorizationActivity : AppCompatActivity() {
 
 
     private val validEmail = "test@test.com"
-    private val validPassword = "123456"
+    private val validPassword = "12345"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
