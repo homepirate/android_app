@@ -13,17 +13,20 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        showFragment(HomeFragment::class.java)
+
+        if (savedInstanceState == null) {
+            showFragment(OnboardFragment::class.java)
+        }
     }
 
-    private fun showFragment(fragmentClass: Class<out Fragment>) {
+    public fun showFragment(fragmentClass: Class<out Fragment>) {
         val fragmentManager: FragmentManager = supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
 
-        // Hide all fragments
-        fragmentManager.fragments.forEach { fragmentTransaction.hide(it) }
+        fragmentManager.fragments.forEach {
+            fragmentTransaction.hide(it)
+        }
 
-        // Show the selected fragment
         val tag = fragmentClass.simpleName
         var fragment = fragmentManager.findFragmentByTag(tag)
         if (fragment == null) {
@@ -33,6 +36,7 @@ class MainActivity : BaseActivity() {
             fragmentTransaction.show(fragment)
         }
 
-        fragmentTransaction.commit()
+        fragmentTransaction.commitNow()
     }
 }
+
