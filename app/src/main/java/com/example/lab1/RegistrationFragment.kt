@@ -18,6 +18,11 @@ class RegistrationFragment : Fragment(R.layout.fragment_registration) {
         val emailInput: EditText = view.findViewById(R.id.email_input)
         val passwordInput: EditText = view.findViewById(R.id.password_input)
         val registerButton: Button = view.findViewById(R.id.register_second_button)
+        val backToLogin: Button = view.findViewById(R.id.back_to_login)
+
+        backToLogin.setOnClickListener {
+            (activity as MainActivity).showFragment(AuthorizationFragment::class.java)
+        }
 
         registerButton.setOnClickListener {
             val username = usernameInput.text.toString().trim()
