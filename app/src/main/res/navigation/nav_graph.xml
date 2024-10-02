@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/onboardFragment">
+
+    <fragment
+        android:id="@+id/onboardFragment"
+        android:name="com.example.lab1.OnboardFragment"
+        android:label="Onboard" >
+        <action
+            android:id="@+id/action_onboardToAuthorization"
+            app:destination="@id/authorizationFragment"
+            app:popUpTo="@id/onboardFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/authorizationFragment"
+        android:name="com.example.lab1.AuthorizationFragment"
+        android:label="Authorization">
+        <argument
+            android:name="user"
+            app:argType="com.example.lab1.User"
+            android:defaultValue="@null"
+            app:nullable="true"/>
+        <action
+            android:id="@+id/action_authorizationFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment"
+            />
+        <action
+            android:id="@+id/action_authorizationFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="com.example.lab1.RegistrationFragment"
+        android:label="Registration">
+        <action
+            android:id="@+id/action_registrationToAuthorization"
+            app:destination="@id/authorizationFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.lab1.HomeFragment"
+        android:label="Home" />
+</navigation>

@@ -5,13 +5,14 @@ import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.navigation.fragment.findNavController
 
 
 class OnboardFragment : Fragment(R.layout.fragment_onboard) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Handler(Looper.getMainLooper()).postDelayed({
-            (activity as MainActivity).showFragment(AuthorizationFragment::class.java)
+            findNavController().navigate(R.id.action_onboardToAuthorization)
         }, 2000)
     }
 }

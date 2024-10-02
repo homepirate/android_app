@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.findNavController
 
 
 class RegistrationFragment : Fragment(R.layout.fragment_registration) {
@@ -20,8 +21,10 @@ class RegistrationFragment : Fragment(R.layout.fragment_registration) {
         val registerButton: Button = view.findViewById(R.id.register_second_button)
         val backToLogin: Button = view.findViewById(R.id.back_to_login)
 
+
         backToLogin.setOnClickListener {
-            (activity as MainActivity).showFragment(AuthorizationFragment::class.java)
+           val action = RegistrationFragmentDirections.actionRegistrationToAuthorization()
+            findNavController().navigate(action)
         }
 
         registerButton.setOnClickListener {
@@ -31,13 +34,8 @@ class RegistrationFragment : Fragment(R.layout.fragment_registration) {
 
             if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
                 val user = User(username, email, password)
-                Toast.makeText(context, "Registration Successful", Toast.LENGTH_SHORT).show()
-
-                val resultBundle = bundleOf("user" to user)
-
-                setFragmentResult("requestKey", resultBundle)
-
-                (activity as MainActivity).showFragment(AuthorizationFragment::class.java)
+                val action = RegistrationFragmentDirections.actionRegistrationToAuthorization(user)
+                findNavController().navigate(action)
             } else {
                 Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
             }
