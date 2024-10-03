@@ -9,11 +9,16 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.lab1.databinding.FragmentHomeBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class HomeFragment : Fragment() {
+
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var characterAdapter: CharacterAdapter
@@ -27,15 +32,14 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        recyclerView = view.findViewById(R.id.recycler_view)
         val gridLayoutManager = GridLayoutManager(requireContext(), 2)
-        recyclerView.layoutManager = gridLayoutManager
+        binding.recyclerView.layoutManager = gridLayoutManager
         characterAdapter = CharacterAdapter(characters)
-        recyclerView.adapter = characterAdapter
+        binding.recyclerView.adapter = characterAdapter
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val visibleItemCount = gridLayoutManager.childCount
@@ -55,11 +59,9 @@ class HomeFragment : Fragment() {
             }
         })
 
-        val searchInput: EditText = view.findViewById(R.id.search_input)
-        val searchButton: Button = view.findViewById(R.id.search_button)
 
-        searchButton.setOnClickListener {
-            val name = searchInput.text.toString()
+        binding.searchButton.setOnClickListener {
+            val name = binding.searchInput.text.toString()
             currentPage = 1
             characters.clear()
             characterAdapter.notifyDataSetChanged()
@@ -76,7 +78,12 @@ class HomeFragment : Fragment() {
 
         fetchCharacters(currentPage)
 
-        return view
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun fetchCharacters(page: Int) {

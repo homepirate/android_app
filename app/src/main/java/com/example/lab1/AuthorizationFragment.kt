@@ -11,27 +11,22 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 
 import androidx.navigation.fragment.navArgs
+import com.example.lab1.databinding.FragmentAuthorizationBinding
 import kotlin.reflect.typeOf
-
 class AuthorizationFragment : Fragment(R.layout.fragment_authorization) {
+
+    private var _binding: FragmentAuthorizationBinding? = null
+    private val binding get() = _binding!!
+
     private val validEmail = "test@test.com"
     private val validPassword = "12345"
-
     private val args: AuthorizationFragmentArgs by navArgs()
 
-
-    private val userList = mutableListOf<User>() // This should be passed or retained somehow
     private var registeredUsers: List<User?> = listOf()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val emailInput: EditText = view.findViewById(R.id.email_input)
-        val passwordInput: EditText = view.findViewById(R.id.password_input)
-        val loginButton: Button = view.findViewById(R.id.login_button)
-        val registerButton: Button = view.findViewById(R.id.register_button)
-
-
+        _binding = FragmentAuthorizationBinding.bind(view)
 
         if (args.user != null) {
             val userRegEmail = args.user?.email ?: ""
@@ -39,25 +34,13 @@ class AuthorizationFragment : Fragment(R.layout.fragment_authorization) {
             val userRegName = args.user?.username ?: ""
             registeredUsers = registeredUsers + args.user
             Toast.makeText(context, "new User $userRegName $userRegEmail registered", Toast.LENGTH_SHORT).show()
-            emailInput.setText(userRegEmail)
-            passwordInput.setText(userRegPasswd)
+            binding.emailInput.setText(userRegEmail)
+            binding.passwordInput.setText(userRegPasswd)
         }
 
-
-//        setFragmentResultListener("requestKey") { key, bundle ->
-//            val user = bundle.getSerializable("user") as? User // Cast to User
-//
-//            user?.let {
-//                registeredUsers = registeredUsers + it
-//                emailInput.setText(it.email)
-//                passwordInput.setText(it.password)
-//                Toast.makeText(context, "new User ${it.username} ${it.email} registered", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-
-        loginButton.setOnClickListener {
-            val userEmail = emailInput.text.toString().trim()
-            val userPassword = passwordInput.text.toString().trim()
+        binding.loginButton.setOnClickListener {
+            val userEmail = binding.emailInput.text.toString().trim()
+            val userPassword = binding.passwordInput.text.toString().trim()
             val user = registeredUsers.find { it?.email == userEmail && it.password == userPassword }
 
             if ((userEmail == validEmail && userPassword == validPassword) || user != null) {
@@ -69,9 +52,14 @@ class AuthorizationFragment : Fragment(R.layout.fragment_authorization) {
             }
         }
 
-        registerButton.setOnClickListener {
+        binding.registerButton.setOnClickListener {
             val action = AuthorizationFragmentDirections.actionAuthorizationFragmentToRegistrationFragment()
             findNavController().navigate(action)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
