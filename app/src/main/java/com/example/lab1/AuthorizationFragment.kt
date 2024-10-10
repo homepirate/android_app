@@ -16,7 +16,7 @@ import kotlin.reflect.typeOf
 class AuthorizationFragment : Fragment(R.layout.fragment_authorization) {
 
     private var _binding: FragmentAuthorizationBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding ?: throw RuntimeException()
 
     private val validEmail = "test@test.com"
     private val validPassword = "12345"

@@ -12,7 +12,7 @@ import com.example.lab1.databinding.FragmentOnboardBinding
 class OnboardFragment : Fragment(R.layout.fragment_onboard) {
 
     private var _binding: FragmentOnboardBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding ?: throw RuntimeException()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

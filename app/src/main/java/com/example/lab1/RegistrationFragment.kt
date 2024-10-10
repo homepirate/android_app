@@ -15,7 +15,7 @@ import com.example.lab1.databinding.FragmentRegistrationBinding
 class RegistrationFragment : Fragment(R.layout.fragment_registration) {
 
     private var _binding: FragmentRegistrationBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding ?: throw RuntimeException()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

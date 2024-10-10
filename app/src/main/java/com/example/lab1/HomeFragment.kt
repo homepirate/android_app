@@ -17,7 +17,7 @@ import retrofit2.Response
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding ?: throw RuntimeException()
 
 
 //    private lateinit var recyclerView: RecyclerView
