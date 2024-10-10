@@ -20,13 +20,15 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
 
-    private lateinit var recyclerView: RecyclerView
+//    private lateinit var recyclerView: RecyclerView
     private lateinit var characterAdapter: CharacterAdapter
     private val characters: MutableList<Character> = mutableListOf()
     private var currentPage = 1
     private var isLoading = false
     private var isSearching = false
     private var searchQuery: String? = null
+    private val characterRepository = CharacterRepository(ApiClient.apiService)
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +40,7 @@ class HomeFragment : Fragment() {
         binding.recyclerView.layoutManager = gridLayoutManager
         characterAdapter = CharacterAdapter(characters)
         binding.recyclerView.adapter = characterAdapter
+
 
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -88,43 +91,33 @@ class HomeFragment : Fragment() {
 
     private fun fetchCharacters(page: Int) {
         isLoading = true
-        ApiClient.apiService.getCharacters(page).enqueue(object : Callback<CharacterResponse> {
-            override fun onResponse(call: Call<CharacterResponse>, response: Response<CharacterResponse>) {
-                isLoading = false
-                if (response.isSuccessful && response.body() != null) {
-                    response.body()?.results?.let {
-                        characters.addAll(it)
-                        characterAdapter.notifyDataSetChanged()
-                    }
+        characterRepository.getCharacters(page) { result, error ->
+            isLoading = false
+            if (error != null) {
+                println("Error fetching characters: ${error.message}")
+            } else {
+                result?.let {
+                    characters.addAll(it)
+                    characterAdapter.notifyDataSetChanged()
                     currentPage++
                 }
-                println(page)
             }
-
-            override fun onFailure(call: Call<CharacterResponse>, t: Throwable) {
-                isLoading = false
-            }
-        })
+        }
     }
 
     private fun searchCharactersByName(name: String, page: Int) {
         isLoading = true
-        println(name + page)
-        ApiClient.apiService.getCharactersByName(name.trim(), page).enqueue(object : Callback<CharacterResponse> {
-            override fun onResponse(call: Call<CharacterResponse>, response: Response<CharacterResponse>) {
-                isLoading = false
-                if (response.isSuccessful && response.body() != null) {
-                    response.body()?.results?.let {
-                        characters.addAll(it)
-                        characterAdapter.notifyDataSetChanged()
-                    }
+        characterRepository.searchCharactersByName(name, page) { result, error ->
+            isLoading = false
+            if (error != null) {
+                println("Error searching characters: ${error.message}")
+            } else {
+                result?.let {
+                    characters.addAll(it)
+                    characterAdapter.notifyDataSetChanged()
                     currentPage++
                 }
             }
-
-            override fun onFailure(call: Call<CharacterResponse>, t: Throwable) {
-                isLoading = false
-            }
-        })
+        }
     }
 }
