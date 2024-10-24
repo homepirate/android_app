@@ -54,6 +54,12 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.preference)
+    implementation(libs.androidx.datastore.core.android)
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+
+
     val nav_version = "2.8.1"
 
     implementation(libs.androidx.core.ktx)

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lab1.databinding.FragmentHomeBinding
@@ -20,7 +21,6 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding ?: throw RuntimeException()
 
 
-//    private lateinit var recyclerView: RecyclerView
     private lateinit var characterAdapter: CharacterAdapter
     private val characters: MutableList<Character> = mutableListOf()
     private var currentPage = 1
@@ -61,6 +61,10 @@ class HomeFragment : Fragment() {
                 }
             }
         })
+
+        binding.settingsBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_settingsFragment)
+        }
 
 
         binding.searchButton.setOnClickListener {

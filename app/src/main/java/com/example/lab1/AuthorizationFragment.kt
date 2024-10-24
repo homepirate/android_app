@@ -1,18 +1,16 @@
 package com.example.lab1
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
+
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 
 import androidx.navigation.fragment.navArgs
 import com.example.lab1.databinding.FragmentAuthorizationBinding
-import kotlin.reflect.typeOf
 class AuthorizationFragment : Fragment(R.layout.fragment_authorization) {
 
     private var _binding: FragmentAuthorizationBinding? = null
@@ -28,12 +26,21 @@ class AuthorizationFragment : Fragment(R.layout.fragment_authorization) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAuthorizationBinding.bind(view)
 
+        val sharedPreferences = requireActivity().getSharedPreferences("my_app_preferences", Context.MODE_PRIVATE)
+
+        val savedEmail = sharedPreferences.getString("user_email", "")
+        val savedPassword = sharedPreferences.getString("user_password", "")
+
+        binding.emailInput.setText(savedEmail)
+        binding.passwordInput.setText(savedPassword)
+
+        // Existing registration logic
         if (args.user != null) {
             val userRegEmail = args.user?.email ?: ""
             val userRegPasswd = args.user?.password ?: ""
             val userRegName = args.user?.username ?: ""
             registeredUsers = registeredUsers + args.user
-            Toast.makeText(context, "new User $userRegName $userRegEmail registered", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "New User $userRegName $userRegEmail registered", Toast.LENGTH_SHORT).show()
             binding.emailInput.setText(userRegEmail)
             binding.passwordInput.setText(userRegPasswd)
         }
@@ -57,6 +64,8 @@ class AuthorizationFragment : Fragment(R.layout.fragment_authorization) {
             findNavController().navigate(action)
         }
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

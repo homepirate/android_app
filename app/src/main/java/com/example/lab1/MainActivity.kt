@@ -1,19 +1,19 @@
 package com.example.lab1
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupActionBarWithNavController
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class MainActivity : BaseActivity() {
 
     private lateinit var navController: NavController
+    private lateinit var settingsDataStore: SettingsDataStore
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +26,21 @@ class MainActivity : BaseActivity() {
             .findFragmentById(R.id.fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
 
+        settingsDataStore = SettingsDataStore(applicationContext)
+
+        // Сохранение темы
+        lifecycleScope.launch {
+            settingsDataStore.saveTheme(true)
+        }
+
+        // Подписка на изменения темы
+        settingsDataStore.isDarkModeFlow
+            .onEach { isDarkMode ->
+                println("Is dark mode: $isDarkMode")
+            }
+            .launchIn(lifecycleScope)
     }
+
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
