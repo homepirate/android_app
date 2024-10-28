@@ -24,4 +24,21 @@
         android:summary="Set the font size."
         android:inputType="number" />
 
+
+    <Preference
+        android:key="file_status"
+        android:title="File Status"
+        android:summary="Checking file status..." />
+
+    <Preference
+        android:key="delete_file"
+        android:title="Delete File"
+        android:summary="Delete the file from external storage." />
+
+    <Preference
+        android:key="restore_file"
+        android:title="Restore File"
+        android:summary="Restore the file from internal storage." />
+
+
 </PreferenceScreen>

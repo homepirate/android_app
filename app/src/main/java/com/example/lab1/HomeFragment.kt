@@ -1,6 +1,7 @@
 package com.example.lab1
 
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import com.example.lab1.databinding.FragmentHomeBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
+import java.io.IOException
 
 class HomeFragment : Fragment() {
 
@@ -85,7 +88,11 @@ class HomeFragment : Fragment() {
 
         fetchCharacters(currentPage)
 
+        saveCharactersToFile()
+
+
         return binding.root
+
     }
 
     override fun onDestroyView() {
@@ -124,4 +131,39 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
+    private fun saveCharactersToFile() {
+        isLoading = true // Start loading
+        characterRepository.getCharacters(1) { result, error -> // Fetch characters from the repository
+            isLoading = false
+            if (error != null) {
+                println("Error fetching characters: ${error.message}")
+            } else {
+                result?.let { characters ->
+                    val fileName = "12.txt"
+                    val content = characters.joinToString("\n") { character -> character.toString() } // Update per your Character toString implementation
+
+                    println("Save to file")
+
+                    val documentsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+
+                    val file = File(documentsDir, fileName)
+
+                    if (file.exists()) {
+                        println("File already exists at: ${file.absolutePath}. No new file created.")
+                        return@let
+                    }
+
+                    try {
+                        file.writeText(content)
+                        println("File saved at: ${file.absolutePath}")
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                        println("Error saving file: ${e.message}")
+                    }
+                }
+            }
+        }
+    }
+
 }
