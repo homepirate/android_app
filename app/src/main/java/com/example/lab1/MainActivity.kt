@@ -1,10 +1,12 @@
 package com.example.lab1
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -28,17 +30,18 @@ class MainActivity : BaseActivity() {
 
         settingsDataStore = SettingsDataStore(applicationContext)
 
-        // Сохранение темы
         lifecycleScope.launch {
             settingsDataStore.saveTheme(true)
         }
 
-        // Подписка на изменения темы
-        settingsDataStore.isDarkModeFlow
-            .onEach { isDarkMode ->
-                println("Is dark mode: $isDarkMode")
-            }
-            .launchIn(lifecycleScope)
+        lifecycleScope.launch {
+            settingsDataStore.fontSizeFlow
+                .combine(settingsDataStore.isDarkModeFlow) { fontSize, isDarkMode ->
+                    val theme = if (isDarkMode) "Dark" else "Light"
+                    Toast.makeText(this@MainActivity, "Theme: $theme, Font Size: $fontSize", Toast.LENGTH_SHORT).show()
+                }
+                .launchIn(lifecycleScope)
+        }
     }
 
 

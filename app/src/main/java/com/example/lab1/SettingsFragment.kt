@@ -40,11 +40,27 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
             true
         }
+
+        val fontSizePreference = findPreference<EditTextPreference>("font_size")
+        fontSizePreference?.setOnPreferenceChangeListener { _, newValue ->
+            lifecycleScope.launch {
+                val fontSize = (newValue as String).toIntOrNull() ?: 14
+                saveFont(fontSize)
+            }
+            true
+        }
     }
+
+
 
     private suspend fun saveTheme(isDarkMode: Boolean) {
         requireContext().dataStore.edit { settings ->
             settings[SettingsDataStore.PreferencesKeys.IS_DARK_MODE] = isDarkMode
+        }
+    }
+    private suspend fun saveFont(fontSize: Int){
+        requireContext().dataStore.edit { settings ->
+            settings[SettingsDataStore.PreferencesKeys.FONT_SIZE] = fontSize
         }
     }
 }
