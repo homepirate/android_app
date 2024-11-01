@@ -133,15 +133,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun saveCharactersToFile() {
-        isLoading = true // Start loading
-        characterRepository.getCharacters(1) { result, error -> // Fetch characters from the repository
+        isLoading = true
+        characterRepository.getCharacters(1) { result, error ->
             isLoading = false
             if (error != null) {
                 println("Error fetching characters: ${error.message}")
             } else {
                 result?.let { characters ->
-                    val fileName = "12.txt"
-                    val content = characters.joinToString("\n") { character -> character.toString() } // Update per your Character toString implementation
+                    val fileName = "loginov.txt"
+                    val content = characters.joinToString("\n") { character -> character.toString() }
 
                     println("Save to file")
 

@@ -1,7 +1,6 @@
 package com.example.lab1
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Environment
 import android.widget.Toast
@@ -17,7 +16,7 @@ import java.io.File
 class SettingsFragment : PreferenceFragmentCompat() {
 
 
-    private val fileName = "12.txt"
+    private val fileName = "loginov.txt"
     private lateinit var internalStorageFile: File
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
