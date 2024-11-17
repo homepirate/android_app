@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("androidx.navigation.safeargs.kotlin")
+    id("kotlin-kapt")
     kotlin("plugin.serialization") version "2.0.20"
 
 }
@@ -20,6 +21,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+
+        kapt {
+            arguments {
+                mapOf("room.schemaLocation" to "$projectDir/schemas")
+            }
         }
     }
 
@@ -61,6 +68,11 @@ dependencies {
 
 
     val nav_version = "2.8.1"
+
+    implementation ("androidx.room:room-runtime:2.5.0") // Библиотека "Room"
+    kapt ("androidx.room:room-compiler:2.5.0") // Кодогенератор
+    implementation ("androidx.room:room-ktx:2.5.0")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,8 +31,18 @@ class HomeFragment : Fragment() {
     private var isLoading = false
     private var isSearching = false
     private var searchQuery: String? = null
-    private val characterRepository = CharacterRepository(ApiClient.apiService)
+    private lateinit var characterLocalRepository: CharacterLocalRepository
+    private lateinit var characterRepository: CharacterRepository
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val appDatabase = AppDatabase.getDatabase(requireContext())
+        val characterDao = appDatabase.characterDao()
+        characterLocalRepository = CharacterLocalRepository(characterDao)
+        characterRepository = CharacterRepository(ApiClient.apiService, characterLocalRepository)
+
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -102,7 +113,7 @@ class HomeFragment : Fragment() {
 
     private fun fetchCharacters(page: Int) {
         isLoading = true
-        characterRepository.getCharacters(page) { result, error ->
+        characterRepository.getCharacters(page, viewLifecycleOwner.lifecycleScope) { result, error ->
             isLoading = false
             if (error != null) {
                 println("Error fetching characters: ${error.message}")
@@ -134,7 +145,7 @@ class HomeFragment : Fragment() {
 
     private fun saveCharactersToFile() {
         isLoading = true
-        characterRepository.getCharacters(1) { result, error ->
+        characterRepository.getCharacters(1, viewLifecycleOwner.lifecycleScope) { result, error ->
             isLoading = false
             if (error != null) {
                 println("Error fetching characters: ${error.message}")
