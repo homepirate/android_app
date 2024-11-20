@@ -3,7 +3,10 @@ package com.example.lab1
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class CharacterLocalRepository(private val characterDao: CharacterDao) {
 
@@ -23,20 +26,26 @@ class CharacterLocalRepository(private val characterDao: CharacterDao) {
                     character.species,
                     character.image
                 )
-                characterDao.insertCharacter(characterEntity)  // Must be suspend
+                characterDao.insertCharacter(characterEntity)
             }
         }
     }
 
-    fun getCharacters(): List<CharacterEntity>? {
-        var characterList: List<CharacterEntity>? = null
-        val liveData: LiveData<List<CharacterEntity>> = characterDao.getAllCharacters()
 
-        liveData.observeForever { list ->
-            characterList = list
-        }
+//    fun getCharacters(): List<CharacterEntity>? {
+//        var characterList: List<CharacterEntity>? = null
+//
+//        val flow: Flow<List<CharacterEntity>> = characterDao.getAllCharacters()
+//
+//        runBlocking {
+//            characterList = flow.firstOrNull()
+//        }
+//
+//        return characterList
+//    }
 
-        return characterList
+    fun getAllCharactersFlow(): Flow<List<CharacterEntity>> {
+        return characterDao.getAllCharacters()
     }
 
     fun updateCharacter(character: CharacterEntity) {
@@ -48,6 +57,12 @@ class CharacterLocalRepository(private val characterDao: CharacterDao) {
     fun deleteCharacter(character: CharacterEntity) {
         CoroutineScope(Dispatchers.IO).launch {
             characterDao.deleteCharacter(character)
+        }
+    }
+
+    fun clearTable() {
+        CoroutineScope(Dispatchers.IO).launch {
+            characterDao.clearTable()
         }
     }
 }

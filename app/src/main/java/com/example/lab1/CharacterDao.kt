@@ -1,19 +1,22 @@
 package com.example.lab1
-import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CharacterDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCharacter(character: CharacterEntity)
 
     @Query("SELECT * FROM characters")
-    fun getAllCharacters(): LiveData<List<CharacterEntity>>
+    fun getAllCharacters(): Flow<List<CharacterEntity>>
 
     @Update
     fun updateCharacter(character: CharacterEntity)
 
     @Delete
     fun deleteCharacter(character: CharacterEntity)
+
+    @Query("DELETE FROM characters")
+    fun clearTable()
 }
 

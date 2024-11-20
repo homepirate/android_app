@@ -46,6 +46,19 @@
                 android:layout_marginRight="10dp"/>
 
             <Button
+                android:id="@+id/refreshButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/button_background"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="10dp"
+                android:text="Refresh"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginRight="10dp"/>
+
+            <Button
                 android:id="@+id/settings_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
