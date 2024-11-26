@@ -244,11 +244,9 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             val allCharactersInDb = characterLocalRepository.getAllCharactersFlow().first()
 
-            // Проверяем, есть ли данные в БД
             if (currentPage * PAGE_SIZE > allCharactersInDb.size) {
                 fetchCharactersFromApi(currentPage)
             } else {
-                // Если данные уже есть, просто увеличим номер страницы (если надо)
                 currentPage++
             }
         }

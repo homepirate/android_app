@@ -32,18 +32,6 @@ class CharacterLocalRepository(private val characterDao: CharacterDao) {
     }
 
 
-//    fun getCharacters(): List<CharacterEntity>? {
-//        var characterList: List<CharacterEntity>? = null
-//
-//        val flow: Flow<List<CharacterEntity>> = characterDao.getAllCharacters()
-//
-//        runBlocking {
-//            characterList = flow.firstOrNull()
-//        }
-//
-//        return characterList
-//    }
-
     fun getAllCharactersFlow(): Flow<List<CharacterEntity>> {
         return characterDao.getAllCharacters()
     }
